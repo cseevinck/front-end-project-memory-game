@@ -27,6 +27,35 @@ function shuffle(array) {
 
 
 /*
+ * Check if the two supplied cards match
+ *   - receive two card elements (the li elements)
+ *   - return true if cards match
+ */
+function CardsMatch (card1, card2) {
+  const card1I = card1.firstElementChild;
+  const card2I = card2.firstElementChild;
+  if (card1I.tagName != "I" || card2I.tagName != "I") {
+    alert ("I elements must be first after li element");
+  }
+  // search for class starting with fa- in card1I & card2I
+  return getClassFA (card1I) == getClassFA (card2I);
+}
+
+/*
+ * Get class name starting with "fa-"
+ *   - input - "I" element
+ *   - return the class name starting with "fa-" from the list
+ */
+function getClassFA (elementI) {
+  for (i=0; i< elementI.classList.length; i++) {
+    if (elementI.classList[i].startsWith('fa-')){
+      return elementI.classList[i];
+    }
+  }
+  alert ('I element must have a class starting with "fa-"');
+}
+
+/*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
  *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
