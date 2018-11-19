@@ -14,8 +14,76 @@ let savCrd1Event;
 let allCards;
 
 /*
- * Create a list that holds all of your cards
+ * Do startup and reset of game
+ *
  */
+function restartGame() {
+  cardIndex1 = null;
+  cardIndex2 = null;
+  clickCount = 0;
+  matchCount = 0;
+  iconId1 = null;
+  iconId2 = null;
+  allowClicks = true;
+  console.log('Here to restart the game');
+  document.querySelector('.moves').innerHTML = clickCount;
+  allCards = document.querySelectorAll('.card');
+  allCards.forEach(function (card, cardIndex) {
+    card.classList.remove('open', 'show', 'match'); // clear all classes
+  });
+
+  /*
+   * Create a list that holds all of your cards
+   */
+
+  // object to create l and li items
+  let TheCard = function (liClass1, liClass2, iClass1, iClass2) {
+    this.liClass1 = liClass1;
+    this.liClass2 = liClass2;
+    this.iClass1 = iClass1;
+    this.iClass2 = iClass2;
+  };
+
+  // create the card list from scratch
+  let cardList = new Array();
+  cardList[0]  = new TheCard('card', 'icon-id-0',  'fa', 'fa-diamond');
+  cardList[1]  = new TheCard('card', 'icon-id-1',  'fa', 'fa-paper-plane-o');
+  cardList[2]  = new TheCard('card', 'icon-id-2',  'fa', 'fa-anchor');
+  cardList[3]  = new TheCard('card', 'icon-id-3',  'fa', 'fa-bolt');
+  cardList[4]  = new TheCard('card', 'icon-id-4',  'fa', 'fa-cube');
+  cardList[5]  = new TheCard('card', 'icon-id-5',  'fa', 'fa-leaf');
+  cardList[6]  = new TheCard('card', 'icon-id-6',  'fa', 'fa-bicycle');
+  cardList[7]  = new TheCard('card', 'icon-id-7',  'fa', 'fa-bomb');
+  cardList[8]  = new TheCard('card', 'icon-id-0',  'fa', 'fa-diamond');
+  cardList[9]  = new TheCard('card', 'icon-id-1',  'fa', 'fa-paper-plane-o');
+  cardList[10] = new TheCard('card', 'icon-id-2', 'fa', 'fa-anchor');
+  cardList[11] = new TheCard('card', 'icon-id-3', 'fa', 'fa-bolt');
+  cardList[12] = new TheCard('card', 'icon-id-4', 'fa', 'fa-cube');
+  cardList[13] = new TheCard('card', 'icon-id-5', 'fa', 'fa-leaf');
+  cardList[14] = new TheCard('card', 'icon-id-6', 'fa', 'fa-bicycle');
+  cardList[15] = new TheCard('card', 'icon-id-7', 'fa', 'fa-bomb');
+
+  shuffle(cardList);
+  // console.log(cardList);
+
+  // Build a dom fragment for the list & Insert it into the list
+  let deck = document.querySelector('.deck');
+  let fragment = document.createDocumentFragment();
+  let elementLi;
+  let elementI;
+
+  for (i = 0; i < 16; i++) {
+    elementLi = document.createElement('li');
+    elementLi.classList.add(cardList[i].liClass1);
+    elementLi.classList.add(cardList[i].liClass2);
+    elementI = document.createElement('i');
+    elementI.classList.add(cardList[i].iClass1);
+    elementI.classList.add(cardList[i].iClass2);
+    elementLi.appendChild(elementI);
+    fragment.appendChild(elementLi);
+    deck.appendChild(fragment);
+  };
+}
 
 /*
  * Display the cards on the page
@@ -26,8 +94,9 @@ let allCards;
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
-  let currentIndex;
-  currentIndex = array.length, temporaryValue, randomIndex;
+  let currentIndex = array.length;
+  let temporaryValue;
+  let randomIndex;
 
   while (currentIndex !== 0) {
     randomIndex = Math.floor(Math.random() * currentIndex);
@@ -41,24 +110,8 @@ function shuffle(array) {
 }
 
 /*
- * Do startup
+ * filterEvent
  *
- */
-function restartGame() {
-  cardIndex1 = null;
-  cardIndex2 = null;
-  clickCount = 0;
-  matchCount = 0;
-  iconId1 = null;
-  iconId2 = null;
-  allowClicks = true;
-  console.log('Here to restart the game');
-  allCards = document.querySelectorAll('.card');
-  allCards.forEach(function (card, cardIndex) {
-    card.classList.remove('open', 'show', 'match'); // clear all classes
-  });
-}
-/*
  * Throw out the events that we don't want an determine if it's first or second card1
  *
  * Input:
@@ -119,7 +172,7 @@ function filterEvent(theEvent) {
 
   // Set card 1 or 2 - strip off 'icon-id-' from class to get card index
   if (iconId1 == null) { // card 1
-    iconId1 = getClassThatMatch(useTarget.classList, 'icon-id-').slice(7);
+    iconId1 = getClassThatMatch(useTarget.classList, 'icon-id-').slice(8);
     console.log('filterEvent - done with card1 - iconId1 = ' + iconId1 + ' iconId2 = ' + iconId2);
     cardIndex1 = getCardIndex(useTarget);
     return 'card1';
@@ -133,7 +186,7 @@ function filterEvent(theEvent) {
   };
 
   cardIndex2 = tempCardIndex2;
-  iconId2 = getClassThatMatch(useTarget.classList, 'icon-id-').slice(7);
+  iconId2 = getClassThatMatch(useTarget.classList, 'icon-id-').slice(8);
   console.log('filterEvent - done with card2 - iconId1 = ' + iconId1 + ' iconId2 = ' + iconId2);
   return 'card2';
 };
@@ -179,6 +232,7 @@ function eventHandler(event) {
       event.target.classList.add('open', 'show');
       console.log('We have a pair - clickCount = ' + clickCount);
       clickCount++;
+      document.querySelector('.moves').innerHTML = clickCount;
 
       // here to check for a match
       if (iconId1 == iconId2) {
@@ -233,6 +287,8 @@ function eventHandler(event) {
 // +**********************************************************
 // +**********************************************************
 // +**********************************************************
+
+restartGame();
 allCards = document.querySelectorAll('.container');
 console.log('wanna see card = ' + allCards[0]);
 
