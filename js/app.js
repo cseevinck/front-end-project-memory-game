@@ -27,10 +27,15 @@ function restartGame() {
   allowClicks = true;
   console.log('Here to restart the game');
   document.querySelector('.moves').innerHTML = clickCount;
-  allCards = document.querySelectorAll('.card');
-  allCards.forEach(function (card, cardIndex) {
-    card.classList.remove('open', 'show', 'match'); // clear all classes
-  });
+  // corky clear all the stars
+
+  deleteChildren(document.querySelector('.deck')); // remove all the deck HTML children
+
+  // allCards = document.querySelectorAll('.card');
+  // document.querySelector('.deck');
+  // allCards.forEach(function (card, cardIndex) {
+  //   card.classList.remove('open', 'show', 'match'); // clear all classes
+  // });
 
   /*
    * Create a list that holds all of your cards
@@ -46,16 +51,16 @@ function restartGame() {
 
   // create the card list from scratch
   let cardList = new Array();
-  cardList[0]  = new TheCard('card', 'icon-id-0',  'fa', 'fa-diamond');
-  cardList[1]  = new TheCard('card', 'icon-id-1',  'fa', 'fa-paper-plane-o');
-  cardList[2]  = new TheCard('card', 'icon-id-2',  'fa', 'fa-anchor');
-  cardList[3]  = new TheCard('card', 'icon-id-3',  'fa', 'fa-bolt');
-  cardList[4]  = new TheCard('card', 'icon-id-4',  'fa', 'fa-cube');
-  cardList[5]  = new TheCard('card', 'icon-id-5',  'fa', 'fa-leaf');
-  cardList[6]  = new TheCard('card', 'icon-id-6',  'fa', 'fa-bicycle');
-  cardList[7]  = new TheCard('card', 'icon-id-7',  'fa', 'fa-bomb');
-  cardList[8]  = new TheCard('card', 'icon-id-0',  'fa', 'fa-diamond');
-  cardList[9]  = new TheCard('card', 'icon-id-1',  'fa', 'fa-paper-plane-o');
+  cardList[0]  = new TheCard('card', 'icon-id-0', 'fa', 'fa-diamond');
+  cardList[1]  = new TheCard('card', 'icon-id-1', 'fa', 'fa-paper-plane-o');
+  cardList[2]  = new TheCard('card', 'icon-id-2', 'fa', 'fa-anchor');
+  cardList[3]  = new TheCard('card', 'icon-id-3', 'fa', 'fa-bolt');
+  cardList[4]  = new TheCard('card', 'icon-id-4', 'fa', 'fa-cube');
+  cardList[5]  = new TheCard('card', 'icon-id-5', 'fa', 'fa-leaf');
+  cardList[6]  = new TheCard('card', 'icon-id-6', 'fa', 'fa-bicycle');
+  cardList[7]  = new TheCard('card', 'icon-id-7', 'fa', 'fa-bomb');
+  cardList[8]  = new TheCard('card', 'icon-id-0', 'fa', 'fa-diamond');
+  cardList[9]  = new TheCard('card', 'icon-id-1', 'fa', 'fa-paper-plane-o');
   cardList[10] = new TheCard('card', 'icon-id-2', 'fa', 'fa-anchor');
   cardList[11] = new TheCard('card', 'icon-id-3', 'fa', 'fa-bolt');
   cardList[12] = new TheCard('card', 'icon-id-4', 'fa', 'fa-cube');
@@ -64,7 +69,6 @@ function restartGame() {
   cardList[15] = new TheCard('card', 'icon-id-7', 'fa', 'fa-bomb');
 
   shuffle(cardList);
-  // console.log(cardList);
 
   // Build a dom fragment for the list & Insert it into the list
   let deck = document.querySelector('.deck');
@@ -81,8 +85,23 @@ function restartGame() {
     elementI.classList.add(cardList[i].iClass2);
     elementLi.appendChild(elementI);
     fragment.appendChild(elementLi);
-    deck.appendChild(fragment);
   };
+
+  deck.appendChild(fragment); // add fragment to the dom
+}
+
+/*
+ * deleteChildren
+ *   delete all the child nodes from this element
+ *
+ */
+
+function deleteChildren(element) {
+  console.log (element);
+  // As long as element has a child node, remove it
+  while (element.hasChildNodes()) {
+      element.removeChild(element.firstChild);
+  }
 }
 
 /*
