@@ -112,21 +112,15 @@ function deleteChildren(element) {
 
 function DoStars(moveCount) {
   const starUl = document.querySelector('.stars');
-  starUl.children[0].firstElementChild.classList.add('fa-star');
   starUl.children[1].firstElementChild.classList.add('fa-star');
   starUl.children[2].firstElementChild.classList.add('fa-star');
-  if (moveCount > 18) {
+  if (moveCount > 12) {
     starUl.children[2].firstElementChild.classList.remove('fa-star');
   };
 
-  if (moveCount > 14) {
+  if (moveCount > 18) {
     starUl.children[1].firstElementChild.classList.remove('fa-star');
   };
-
-  if (moveCount > 10) {
-    starUl.children[0].firstElementChild.classList.remove('fa-star');
-  };
-
 }
 
 /*
