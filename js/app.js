@@ -7,7 +7,7 @@ let iconId1 = null;
 let iconId2 = null;
 let cardIndex1 = null;
 let cardIndex2 = null;
-let clickCount = 0;     // count total number of pairs tried
+let moveCount = 0;     // count total number of pairs tried
 let matchCount = 0;     // count the number of matched pairs found
 let allowClicks = true;
 let savCrd1Event;
@@ -20,14 +20,14 @@ let allCards;
 function restartGame() {
   cardIndex1 = null;
   cardIndex2 = null;
-  clickCount = 0;
+  moveCount = 0;
   matchCount = 0;
   iconId1 = null;
   iconId2 = null;
   allowClicks = true;
   console.log('Here to restart the game');
-  document.querySelector('.moves').innerHTML = clickCount;
-  // corky clear all the stars
+  document.querySelector('.moves').innerHTML = moveCount;
+  DoStars(moveCount);
 
   deleteChildren(document.querySelector('.deck')); // remove all the deck HTML children
 
@@ -78,6 +78,7 @@ function restartGame() {
 
   for (i = 0; i < 16; i++) {
     elementLi = document.createElement('li');
+    // let fragment = document.createDocumentFragment();
     elementLi.classList.add(cardList[i].liClass1);
     elementLi.classList.add(cardList[i].liClass2);
     elementI = document.createElement('i');
@@ -97,11 +98,35 @@ function restartGame() {
  */
 
 function deleteChildren(element) {
-  console.log (element);
+  console.log(element);
+
   // As long as element has a child node, remove it
   while (element.hasChildNodes()) {
-      element.removeChild(element.firstChild);
+    element.removeChild(element.firstChild);
   }
+}
+
+/*
+ * Initialize stars
+ */
+
+function DoStars(moveCount) {
+  const starUl = document.querySelector('.stars');
+  starUl.children[0].firstElementChild.classList.add('fa-star');
+  starUl.children[1].firstElementChild.classList.add('fa-star');
+  starUl.children[2].firstElementChild.classList.add('fa-star');
+  if (moveCount > 18) {
+    starUl.children[2].firstElementChild.classList.remove('fa-star');
+  };
+
+  if (moveCount > 14) {
+    starUl.children[1].firstElementChild.classList.remove('fa-star');
+  };
+
+  if (moveCount > 10) {
+    starUl.children[0].firstElementChild.classList.remove('fa-star');
+  };
+
 }
 
 /*
@@ -249,9 +274,10 @@ function eventHandler(event) {
     case 'card2':
       console.log('eventHandler - card2 classList ' + event.target.classList);
       event.target.classList.add('open', 'show');
-      console.log('We have a pair - clickCount = ' + clickCount);
-      clickCount++;
-      document.querySelector('.moves').innerHTML = clickCount;
+      console.log('We have a pair - moveCount = ' + moveCount);
+      moveCount++;
+      DoStars(moveCount);
+      document.querySelector('.moves').innerHTML = moveCount;
 
       // here to check for a match
       if (iconId1 == iconId2) {
@@ -262,6 +288,7 @@ function eventHandler(event) {
         event.target.classList.add('match'); // card 2
         savCrd1Event.target.classList.add('match'); // card 1
         matchCount++;
+        DoStars(moveCount);
         console.log('cards match - matchCount = ' + matchCount);
 
         // here to check for all cards match = end of game
