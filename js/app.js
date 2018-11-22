@@ -12,6 +12,7 @@ let matchCount = 0;     // count the number of matched pairs found
 let allowClicks = true;
 let savCrd1Event;
 let allCards;
+let startTime;
 
 /*
  * Do startup and reset of game
@@ -26,7 +27,15 @@ function restartGame() {
   iconId2 = null;
   allowClicks = true;
   console.log('Here to restart the game');
-  document.querySelector('.moves').innerHTML = moveCount;
+
+  // Start the counter timer
+  var date = new Date();
+  startTime = Math.round(date.getTime() / 1000);
+  console.log('startTime = ', startTime);
+  setInterval(function () { displayCounter(); }, 1000);
+
+  // Clear the move count
+  document.querySelector('.moves').innerHTML = moveCount + '&nbsp;';
   DoStars(moveCount);
 
   deleteChildren(document.querySelector('.deck')); // remove all the deck HTML children
@@ -271,7 +280,7 @@ function eventHandler(event) {
       console.log('We have a pair - moveCount = ' + moveCount);
       moveCount++;
       DoStars(moveCount);
-      document.querySelector('.moves').innerHTML = moveCount;
+      document.querySelector('.moves').innerHTML = moveCount + '&nbsp;';
 
       // here to check for a match
       if (iconId1 == iconId2) {
@@ -435,6 +444,32 @@ function shakeThem(element1, element2) {
   theShake();
 };
 
+/*
+ * displayCounter
+ *
+ */
+
+function displayCounter() {
+  var disp;
+  let date = new Date();
+  let nowTime = Math.round(date.getTime() / 1000);
+
+  // console.log('total lapsed seconds - ' + lapsedTime) ; //make seconds
+  let lapsedTime = nowTime - startTime;
+  let hours = Math.floor(lapsedTime / 3600);
+  lapsedTime %= 3600; // remainder = seconds after hours removed
+  let minutes = Math.floor(lapsedTime / 60);
+  let seconds = Math.floor(lapsedTime % 60);
+
+  // Strings with leading zeroes
+  hours = String(hours).padStart(2, '0');
+  minutes = String(minutes).padStart(2, '0');
+  seconds = String(seconds).padStart(2, '0');
+  disp = 'H:' + hours + ' M:' + minutes + 'S:' + seconds + ' ';
+  document.getElementById('timer').innerHTML = 'H: ' +
+            hours + ' M: ' + minutes + ' S: ' + seconds + ' ';
+  console.log('timer string = ' + disp);
+}
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
