@@ -13,6 +13,7 @@ let allowClicks = true;
 let savCrd1Event;
 let allCards;
 let startTime;
+let intervalId = 0; // id of the interval for the timer
 
 /*
  * Do startup and reset of game
@@ -28,15 +29,10 @@ function restartGame() {
   allowClicks = true;
   console.log('Here to restart the game');
 
-  // Start the counter timer
-  var date = new Date();
-  startTime = Math.round(date.getTime() / 1000);
-  console.log('startTime = ', startTime);
-  setInterval(function () { displayCounter(); }, 1000);
-
   // Clear the move count
   document.querySelector('.moves').innerHTML = moveCount + '&nbsp;';
   DoStars(moveCount);
+  displayCounter('stop'); //stop counter
 
   deleteChildren(document.querySelector('.deck')); // remove all the deck HTML children
 
@@ -278,7 +274,9 @@ function eventHandler(event) {
       console.log('eventHandler - card2 classList ' + event.target.classList);
       event.target.classList.add('open', 'show');
       console.log('We have a pair - moveCount = ' + moveCount);
-      moveCount++;
+      if (moveCount++ == 0) {
+        displayCounter('start');
+      };
       DoStars(moveCount);
       document.querySelector('.moves').innerHTML = moveCount + '&nbsp;';
 
@@ -297,6 +295,7 @@ function eventHandler(event) {
         // here to check for all cards match = end of game
         if (matchCount > 7) {
           // we are done - you are a winner
+          displayCounter('stop');
           alert('You won - good job');
         }
       } else {
@@ -445,31 +444,78 @@ function shakeThem(element1, element2) {
 };
 
 /*
- * displayCounter
- *
+ * Start/Stop interval
+ *  - input intervalId or zeroes
+ *      If zero, start the interval
+ *      If not zero, stop the interval
  */
 
-function displayCounter() {
-  var disp;
-  let date = new Date();
-  let nowTime = Math.round(date.getTime() / 1000);
+function startStopInterval(intervalId) {
+  if (intervalId == 0) {
 
-  // console.log('total lapsed seconds - ' + lapsedTime) ; //make seconds
-  let lapsedTime = nowTime - startTime;
-  let hours = Math.floor(lapsedTime / 3600);
-  lapsedTime %= 3600; // remainder = seconds after hours removed
-  let minutes = Math.floor(lapsedTime / 60);
-  let seconds = Math.floor(lapsedTime % 60);
+    // Start the counter timer
+    var date = new Date();
+    startTime = Math.round(date.getTime() / 1000);
+    console.log('startTime = ', startTime);
+    intervalId = setInterval(function () { displayCounter(); }, 1000);
+  } else {
+    clearInterval(intervalId);
+  }
 
-  // Strings with leading zeroes
-  hours = String(hours).padStart(2, '0');
-  minutes = String(minutes).padStart(2, '0');
-  seconds = String(seconds).padStart(2, '0');
-  disp = 'H:' + hours + ' M:' + minutes + 'S:' + seconds + ' ';
-  document.getElementById('timer').innerHTML = 'H: ' +
-            hours + ' M: ' + minutes + ' S: ' + seconds + ' ';
-  console.log('timer string = ' + disp);
 }
+/*
+ *
+ * displayCounter
+ * input = action
+ *      action = 'display' - start interval timer if intervalId = 0 and display it
+ *      action = 'stop' - clear interval timer
+ *      action = 'display' -
+ */
+
+function displayCounter(action) {
+  let disp;
+  let date = new Date();
+  let nowTime;
+  let lapsedTime;
+  let hours;
+  let minutes;
+  let seconds;
+
+  if (action == 'stop') {
+    console.log('Stop displayCounter');
+    clearInterval(intervalId);
+    return;
+  } else if (action == 'start') {
+
+    // Start the counter timer
+    // date = new Date();
+    startTime = Math.round(date.getTime() / 1000);
+    console.log('Start displayCounter - startTime = ', startTime);
+    intervalId = setInterval(function () { displayCounter('display'); }, 1000);
+  } else if (action == 'display') {
+
+    // Start the counter timer
+    // date = new Date();
+    nowTime = Math.round(date.getTime() / 1000);
+
+    // console.log('total lapsed seconds - ' + lapsedTime) ; //make seconds
+    lapsedTime = nowTime - startTime;
+    hours = Math.floor(lapsedTime / 3600);
+    lapsedTime %= 3600; // remainder = seconds after hours removed
+    minutes = Math.floor(lapsedTime / 60);
+    seconds = Math.floor(lapsedTime % 60);
+
+    // Strings with leading zeroes
+    hours = String(hours).padStart(2, '0');
+    minutes = String(minutes).padStart(2, '0');
+    seconds = String(seconds).padStart(2, '0');
+    disp = 'H:' + hours + ' M:' + minutes + 'S:' + seconds + ' ';
+    document.getElementById('timer').innerHTML = 'H: ' +
+              hours + ' M: ' + minutes + ' S: ' + seconds + ' ';
+    console.log('timer string = ' + disp);
+  }
+}
+
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
