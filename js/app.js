@@ -1,14 +1,14 @@
 /*
-*  Declare script wide variables
-*/
+ *  Declare script wide variables
+ */
 let theEvent = 0;
 let useTarget;
 let iconId1 = null;
 let iconId2 = null;
 let cardIndex1 = null;
 let cardIndex2 = null;
-let moveCount = 0;     // count total number of pairs tried
-let matchCount = 0;     // count the number of matched pairs found
+let moveCount = 0; // count total number of pairs tried
+let matchCount = 0; // count the number of matched pairs found
 let allowClicks = true;
 let savCrd1Event;
 let allCards;
@@ -31,8 +31,8 @@ function restartGame() {
 
   // Clear the move count
   document.querySelector('.moves').innerHTML = moveCount + '&nbsp;';
-  DoStars(moveCount);
-  displayCounter('stop'); //stop counter
+  document.getElementById('stars').innerHTML = doStars(moveCount);
+  document.getElementById('timer').innerHTML = timeCounter('reset'); //stop counter
 
   deleteChildren(document.querySelector('.deck')); // remove all the deck HTML children
 
@@ -47,7 +47,7 @@ function restartGame() {
    */
 
   // object to create l and li items
-  let TheCard = function (liClass1, liClass2, iClass1, iClass2) {
+  let TheCard = function(liClass1, liClass2, iClass1, iClass2) {
     this.liClass1 = liClass1;
     this.liClass2 = liClass2;
     this.iClass1 = iClass1;
@@ -56,16 +56,16 @@ function restartGame() {
 
   // create the card list from scratch
   let cardList = new Array();
-  cardList[0]  = new TheCard('card', 'icon-id-0', 'fa', 'fa-diamond');
-  cardList[1]  = new TheCard('card', 'icon-id-1', 'fa', 'fa-paper-plane-o');
-  cardList[2]  = new TheCard('card', 'icon-id-2', 'fa', 'fa-anchor');
-  cardList[3]  = new TheCard('card', 'icon-id-3', 'fa', 'fa-bolt');
-  cardList[4]  = new TheCard('card', 'icon-id-4', 'fa', 'fa-cube');
-  cardList[5]  = new TheCard('card', 'icon-id-5', 'fa', 'fa-leaf');
-  cardList[6]  = new TheCard('card', 'icon-id-6', 'fa', 'fa-bicycle');
-  cardList[7]  = new TheCard('card', 'icon-id-7', 'fa', 'fa-bomb');
-  cardList[8]  = new TheCard('card', 'icon-id-0', 'fa', 'fa-diamond');
-  cardList[9]  = new TheCard('card', 'icon-id-1', 'fa', 'fa-paper-plane-o');
+  cardList[0] = new TheCard('card', 'icon-id-0', 'fa', 'fa-diamond');
+  cardList[1] = new TheCard('card', 'icon-id-1', 'fa', 'fa-paper-plane-o');
+  cardList[2] = new TheCard('card', 'icon-id-2', 'fa', 'fa-anchor');
+  cardList[3] = new TheCard('card', 'icon-id-3', 'fa', 'fa-bolt');
+  cardList[4] = new TheCard('card', 'icon-id-4', 'fa', 'fa-cube');
+  cardList[5] = new TheCard('card', 'icon-id-5', 'fa', 'fa-leaf');
+  cardList[6] = new TheCard('card', 'icon-id-6', 'fa', 'fa-bicycle');
+  cardList[7] = new TheCard('card', 'icon-id-7', 'fa', 'fa-bomb');
+  cardList[8] = new TheCard('card', 'icon-id-0', 'fa', 'fa-diamond');
+  cardList[9] = new TheCard('card', 'icon-id-1', 'fa', 'fa-paper-plane-o');
   cardList[10] = new TheCard('card', 'icon-id-2', 'fa', 'fa-anchor');
   cardList[11] = new TheCard('card', 'icon-id-3', 'fa', 'fa-bolt');
   cardList[12] = new TheCard('card', 'icon-id-4', 'fa', 'fa-cube');
@@ -83,6 +83,7 @@ function restartGame() {
 
   for (i = 0; i < 16; i++) {
     elementLi = document.createElement('li');
+
     // let fragment = document.createDocumentFragment();
     elementLi.classList.add(cardList[i].liClass1);
     elementLi.classList.add(cardList[i].liClass2);
@@ -112,20 +113,29 @@ function deleteChildren(element) {
 }
 
 /*
- * Initialize stars
+ * Display stars
  */
 
-function DoStars(moveCount) {
-  const starUl = document.querySelector('.stars');
-  starUl.children[1].firstElementChild.classList.add('fa-star');
-  starUl.children[2].firstElementChild.classList.add('fa-star');
-  if (moveCount > 12) {
-    starUl.children[2].firstElementChild.classList.remove('fa-star');
+function doStars(moveCount) {
+  const fsStar = "<i class='fa fa-star'></i>";
+  let starString = fsStar;
+  console.log('doStars');
+  console.log('doStars - ' + starString);
+
+  // "<a href='/'><i class='fa fa-star'></i></a> &nbsp;>&nbsp; ";
+  // document.getElementById("stars").innerHTML =
+  //     "<i class='fa fa-star'></i>"
+
+  if (moveCount < 12) {
+    starString = starString + fsStar;
   };
 
-  if (moveCount > 18) {
-    starUl.children[1].firstElementChild.classList.remove('fa-star');
+  if (moveCount < 18) {
+    starString = starString + fsStar;
   };
+
+  console.log('doStars - ' + starString);
+  return starString;
 }
 
 /*
@@ -190,9 +200,9 @@ function filterEvent(theEvent) {
 
   console.log('filterEvent - Use this classList= ' + useTarget.classList);
   if (!(((useTarget.classList.contains('restart')) ||
-        (useTarget.classList.contains('card'))))) {
-    console.log('filterEvent - discard cause not "restart" or "card" - it is = '
-                + useTarget.classList);
+      (useTarget.classList.contains('card'))))) {
+    console.log('filterEvent - discard cause not "restart" or "card" - it is = ' +
+      useTarget.classList);
     return 'discard';
   };
 
@@ -208,7 +218,7 @@ function filterEvent(theEvent) {
 
   // Discard event if card is already face-up
   if (((useTarget.classList.contains('show')) ||
-        useTarget.classList.contains('match'))) {
+      useTarget.classList.contains('match'))) {
     console.log('filterEvent - allready face-up - ignore click');
     return 'discard';
   }
@@ -273,11 +283,13 @@ function eventHandler(event) {
     case 'card2':
       console.log('eventHandler - card2 classList ' + event.target.classList);
       event.target.classList.add('open', 'show');
+      console.log('We have a pair');
       console.log('We have a pair - moveCount = ' + moveCount);
       if (moveCount++ == 0) {
-        displayCounter('start');
+        document.getElementById('timer').innerHTML = timeCounter('start');
       };
-      DoStars(moveCount);
+
+      document.getElementById('stars').innerHTML = doStars(moveCount);
       document.querySelector('.moves').innerHTML = moveCount + '&nbsp;';
 
       // here to check for a match
@@ -289,14 +301,14 @@ function eventHandler(event) {
         event.target.classList.add('match'); // card 2
         savCrd1Event.target.classList.add('match'); // card 1
         matchCount++;
-        DoStars(moveCount);
+        document.getElementById('stars').innerHTML = doStars(moveCount);
         console.log('cards match - matchCount = ' + matchCount);
 
         // here to check for all cards match = end of game
         if (matchCount > 7) {
-          // we are done - you are a winner
-          displayCounter('stop');
-          alert('You won - good job');
+
+          // we are done - you are a winne
+          showModal();
         }
       } else {
 
@@ -305,7 +317,7 @@ function eventHandler(event) {
         shakeThem(event.target, savCrd1Event.target);
 
         // wait for 2 seconds then hide cards
-        setTimeout(function () {
+        setTimeout(function() {
           savCrd1Event.target.classList.remove('open', 'show'); // hide first card
           event.target.classList.remove('open', 'show'); // hide second card
           allowClicks = true; // setting to allow clicks again
@@ -363,7 +375,7 @@ function CardsMatch(card1, card2) {
  */
 function getCardIndex(theCard) {
   allCards = document.querySelectorAll('.card');
-  allCards.forEach(function (card, cardIndex) {
+  allCards.forEach(function(card, cardIndex) {
     // console.log(card);
     if (card === theCard) {
       // console.log('This is the getCardIndex = ' + cardIndex);
@@ -442,37 +454,22 @@ function shakeThem(element1, element2) {
 
   theShake();
 };
-
-/*
- * Start/Stop interval
- *  - input intervalId or zeroes
- *      If zero, start the interval
- *      If not zero, stop the interval
- */
-
-function startStopInterval(intervalId) {
-  if (intervalId == 0) {
-
-    // Start the counter timer
-    var date = new Date();
-    startTime = Math.round(date.getTime() / 1000);
-    console.log('startTime = ', startTime);
-    intervalId = setInterval(function () { displayCounter(); }, 1000);
-  } else {
-    clearInterval(intervalId);
-  }
-
-}
 /*
  *
- * displayCounter
+ * timeCounter
+ *
+ * Calulate and format the timer string
  * input = action
- *      action = 'display' - start interval timer if intervalId = 0 and display it
- *      action = 'stop' - clear interval timer
- *      action = 'display' -
+ *      action = 'start' - start interval timer if intervalId = 0 and return string
+ *      action = 'stop' - clear interval timer and and return string
+ *          if this is first call (game start) then force time to zero
+ *      action = 'reset' - clear interval timer and and return zero string
+ *      action = 'display' - return string
+ * return - timer string
+ *
  */
 
-function displayCounter(action) {
+function timeCounter(action) {
   let disp;
   let date = new Date();
   let nowTime;
@@ -481,41 +478,127 @@ function displayCounter(action) {
   let minutes;
   let seconds;
 
-  if (action == 'stop') {
-    console.log('Stop displayCounter');
-    clearInterval(intervalId);
-    return;
-  } else if (action == 'start') {
+  switch (action) {
+    case 'reset':
+      {
+        console.log('reset timeCounter - startTime = ', startTime);
+        startTime = Math.round(date.getTime() / 1000); // force zero time
+      };
 
-    // Start the counter timer
-    // date = new Date();
-    startTime = Math.round(date.getTime() / 1000);
-    console.log('Start displayCounter - startTime = ', startTime);
-    intervalId = setInterval(function () { displayCounter('display'); }, 1000);
-  } else if (action == 'display') {
+    case 'stop':
+      {
+        if (intervalId == 0) {
+          startTime = Math.round(date.getTime() / 1000); // force zero time
+        };
 
-    // Start the counter timer
-    // date = new Date();
-    nowTime = Math.round(date.getTime() / 1000);
+        clearInterval(intervalId);
+        intervalId = 0;
+        break;
+      };
 
-    // console.log('total lapsed seconds - ' + lapsedTime) ; //make seconds
-    lapsedTime = nowTime - startTime;
-    hours = Math.floor(lapsedTime / 3600);
-    lapsedTime %= 3600; // remainder = seconds after hours removed
-    minutes = Math.floor(lapsedTime / 60);
-    seconds = Math.floor(lapsedTime % 60);
+    case 'start':
+      {
+        console.log('Start timeCounter - startTime = ', startTime);
+        if (intervalId != 0) {
+          alert('timeCounter - Already started = ');
+        } else {
 
-    // Strings with leading zeroes
-    hours = String(hours).padStart(2, '0');
-    minutes = String(minutes).padStart(2, '0');
-    seconds = String(seconds).padStart(2, '0');
-    disp = 'H:' + hours + ' M:' + minutes + 'S:' + seconds + ' ';
-    document.getElementById('timer').innerHTML = 'H: ' +
-              hours + ' M: ' + minutes + ' S: ' + seconds + ' ';
-    console.log('timer string = ' + disp);
-  }
-}
+          // Start the counter timer
+          startTime = Math.round(date.getTime() / 1000);
+          console.log('Start timeCounter - startTime = ', startTime);
+          intervalId = setInterval(function() {
+            document.getElementById('timer').innerHTML =
+              timeCounter('display');
+          }, 1000);
+        };
+      };
 
+    case 'display':
+      {
+        console.log('Display timeCounter - startTime = ', startTime);
+      };
+  };
+
+  // if ((action == 'stop') || (action == 'reset')) {
+  //   if ((intervalId == 0) || (action == 'reset')) {
+  //     startTime = Math.round(date.getTime() / 1000); // force zero time
+  //   } else {
+  //     clearInterval(intervalId);
+  //   }
+  // } else if (action == 'start') {
+  //   if (intervalId != 0) {
+  //     alert('timeCounter - Already started = ');
+  //   } else {
+  //
+  //     // Start the counter timer
+  //     startTime = Math.round(date.getTime() / 1000);
+  //     console.log('Start timeCounter - startTime = ', startTime);
+  //     intervalId = setInterval(function () {
+  //       document.getElementById('timer').innerHTML = timeCounter('display');
+  //     }, 1000);
+  //   };
+  // };
+
+  // format the timer string and return it
+  nowTime = Math.round(date.getTime() / 1000);
+
+  // console.log('total lapsed seconds - ' + lapsedTime) ; //make seconds
+  lapsedTime = nowTime - startTime;
+  hours = Math.floor(lapsedTime / 3600);
+  lapsedTime %= 3600; // remainder = seconds after hours removed
+  minutes = Math.floor(lapsedTime / 60);
+  seconds = Math.floor(lapsedTime % 60);
+
+  // Strings with leading zeroes
+  hours = String(hours).padStart(2, '0');
+  minutes = String(minutes).padStart(2, '0');
+  seconds = String(seconds).padStart(2, '0');
+  console.log('timer string = ' + 'H: ' + hours + ' M: ' +
+    minutes + ' S: ' + seconds + ' ');
+  return ('H: ' + hours + ' M: ' + minutes + ' S: ' + seconds + ' ');
+};
+
+/*
+ *
+ * showModal
+ *
+ */
+function showModal() {
+  console.log('showModal');
+  document.getElementById('move-cnt').innerHTML = 'Number of moves: ' +
+    moveCount;
+  document.getElementById('game-time').innerHTML = 'Game time:  ' +
+    timeCounter('stop');
+  console.log('showModal - rating: ' + doStars(moveCount));
+  document.getElementById('game-rating').innerHTML = 'Game rating: ' +
+    doStars(moveCount);
+  document.querySelector('.modal-bg').style.display = 'flex';
+};
+/*
+ *
+ * hideModal
+ *
+ */
+function hideModal() {
+  console.log('hideModal');
+  document.querySelector('.modal-bg').style.display = 'none';
+};
+/*
+ *
+ * hideModal
+ *
+ */
+function modalRestart() {
+  console.log('restartModal');
+  document.querySelector('.modal-bg').style.display = 'none';
+  restartGame();
+};
+
+function quitGame() {
+  console.log('quitGame');
+  document.querySelector('.modal-bg').style.display = 'none';
+  document.querySelector('.stop-screen').style.display = 'flex';
+};
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)

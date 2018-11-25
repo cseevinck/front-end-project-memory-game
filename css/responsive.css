@@ -6,6 +6,14 @@ h1 {
   font-size  : 9vw;
 }
 
+.logo {
+  display      : block;
+  max-width    : 60%;
+  height       : auto;
+  margin-right : auto;
+  margin-left  : auto;
+}
+
 .container {
   /* margin-top: 5px; */
 }
@@ -40,12 +48,12 @@ h1 {
   font-size     : 15px;
 }
 
-  #timer {
-    display     : flex;
-    margin-right : auto;
-    margin-left  : auto;
-    font-size   : 15px;
-  }
+#timer {
+  display      : flex;
+  margin-right : auto;
+  margin-left  : auto;
+  font-size    : 15px;
+}
 
 .score-panel .restart {
   font-size : 15px;
@@ -60,6 +68,14 @@ h1 {
   and (max-width : 600px) {
   h1 {
     font-size : 7vw;
+  }
+
+  .logo {
+    display      : block;
+    max-width    : 60%;
+    height       : auto;
+    margin-right : auto;
+    margin-left  : auto;
   }
 
   .container {
@@ -86,22 +102,54 @@ h1 {
   }
 
   .score-panel {
-    width     : 80%;
-    padding   : .5em;
-    margin-top: 0em;
-    font-size : 1em;
+    width      : 80%;
+    margin-top : 0em;
+    padding    : .5em;
+    font-size  : 1em;
   }
 
-    #timer {
-      display     : flex;
-      margin-right : auto;
-      margin-left  : auto;
-      font-size   : 1em;
-    }
+  #timer {
+    display      : flex;
+    margin-right : auto;
+    margin-left  : auto;
+    font-size    : 1em;
+  }
 
   .score-panel .restart {
-    font-size : 1em;
-    margin-top: -30px;
+    margin-top : -30px;
+    font-size  : 1em;
+  }
+  /* Model styling */
+
+  .modal-contents {
+    position      : absolute;
+    width         : 300px;
+    height        : 300px;
+    padding       : 10px;
+    color         : yellow;
+    color         : yellow;
+    border-radius : 4px;
+    background    : linear-gradient(
+                      160deg,
+                      #477148 0%,
+                      #477148 100%
+                    );
+    text-align    : center;
+    font-size     : 1em;
+    font-weight   : 500;
+    /* top: 90px; */
+  }
+
+  .great {
+    color       : yellow;
+    font-size   : 1.2em;
+    font-weight : 600;
+  }
+
+  .thanks {
+    color       : yellow;
+    font-size   : 2em;
+    font-weight : 900;
   }
 }
 
@@ -111,7 +159,15 @@ h1 {
   only screen
   and (min-width : 600px) {
   h1 {
-    font-size : 5vw;;
+    font-size : 5vw;
+  }
+
+  .logo {
+    display      : block;
+    max-width    : 60%;
+    height       : auto;
+    margin-right : auto;
+    margin-left  : auto;
   }
 
   .container {
@@ -146,16 +202,35 @@ h1 {
     font-size     : 1em;
   }
 
-    #timer {
-      display     : flex;
-      margin-right : auto;
-      margin-left  : auto;
-    font-size   : 1em;
-    }
+  #timer {
+    display      : flex;
+    margin-right : auto;
+    margin-left  : auto;
+    font-size    : 1em;
+  }
 
   .score-panel .restart {
-    font-size : 1em;
-    margin-top: -40px;
+    margin-top : -40px;
+    font-size  : 1em;
+  }
+  /* Model styling */
+
+  .modal-contents {
+    width       : 300px;
+    height      : 300px;
+    color       : yellow;
+    font-size   : 1em;
+    font-weight : 500;
+  }
+
+  .great {
+    font-size   : 1.2em;
+    font-weight : 600;
+  }
+
+  .thanks {
+    font-size   : 2em;
+    font-weight : 900;
   }
 }
 
@@ -166,6 +241,14 @@ h1 {
   and (min-width : 768px) {
   h1 {
     font-size : 5vw;
+  }
+
+  .logo {
+    display      : block;
+    max-width    : 60%;
+    height       : auto;
+    margin-right : auto;
+    margin-left  : auto;
   }
 
   .container {
@@ -193,27 +276,46 @@ h1 {
 
   .score-panel {
     display       : flex;
-    text-align    : justify;
     width         : 600px;
     margin-top    : 1em;
     margin-bottom : 1em;
     margin-left   : auto;
     padding       : .5em;
+    text-align    : justify;
     font-size     : 1em;
   }
 
   #timer {
-    display     : flex;
+    display      : flex;
     margin-right : auto;
     margin-left  : auto;
-    font-size   : 1em;
+    font-size    : 1em;
   }
 
   .score-panel .restart {
-    display     : flex;
-    float       : right;
-    font-size : 1em;
-    margin-top: 0px;
+    display    : flex;
+    float      : right;
+    margin-top : 0px;
+    font-size  : 1em;
+  }
+  /* Model styling */
+
+  .modal-contents {
+    width       : 300px;
+    height      : 300px;
+    color       : yellow;
+    font-size   : 1em;
+    font-weight : 500;
+  }
+
+  .great {
+    font-size   : 1.2em;
+    font-weight : 600;
+  }
+
+  .thanks {
+    font-size   : 2em;
+    font-weight : 900;
   }
 }
 
@@ -226,6 +328,14 @@ h1 {
     font-size : 5vw;
   }
 
+  .logo {
+    display      : block;
+    max-width    : 60%;
+    height       : auto;
+    margin-right : auto;
+    margin-left  : auto;
+  }
+
   .container {
     /* margin-top: 5px; */
   }
@@ -258,22 +368,41 @@ h1 {
     font-size     : 1em;
   }
 
-    #timer {
-      display     : flex;
-      margin-right : auto;
-      margin-left  : auto;
-      font-size   : 1em;
-    }
+  #timer {
+    display      : flex;
+    margin-right : auto;
+    margin-left  : auto;
+    font-size    : 1em;
+  }
 
   .score-panel .restart {
-    font-size : 1em;
-        margin-top: 0px;
+    margin-top : 0px;
+    font-size  : 1em;
   }
 
   #display-timer {
     padding-top : 10px;
     font-size   : 1em;
-    }
+  }
+  /* Model styling */
+
+  .modal-contents {
+    width       : 300px;
+    height      : 300px;
+    color       : yellow;
+    font-size   : 1em;
+    font-weight : 500;
+  }
+
+  .great {
+    font-size   : 1.2em;
+    font-weight : 600;
+  }
+
+  .thanks {
+    font-size   : 2em;
+    font-weight : 900;
+  }
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
@@ -285,6 +414,14 @@ h1 {
     font-size : 55px;
   }
 
+  .logo {
+    display      : block;
+    max-width    : 60%;
+    height       : auto;
+    margin-right : auto;
+    margin-left  : auto;
+  }
+
   .container {
     /* margin-top: 5px; */
   }
@@ -318,14 +455,33 @@ h1 {
   }
 
   .score-panel .restart {
-    font-size : 1em;
-        margin-top: 0px;
+    margin-top : 0px;
+    font-size  : 1em;
   }
 
-    #timer {
-      display     : flex;
-      margin-right : auto;
-      margin-left  : auto;
-      font-size   : 1em;
-    }
+  #timer {
+    display      : flex;
+    margin-right : auto;
+    margin-left  : auto;
+    font-size    : 1em;
+  }
+  /* Model styling */
+
+  .modal-contents {
+    width       : 300px;
+    height      : 300px;
+    color       : yellow;
+    font-size   : 1em;
+    font-weight : 500;
+  }
+
+  .great {
+    font-size   : 1.2em;
+    font-weight : 600;
+  }
+
+  .thanks {
+    font-size   : 2em;
+    font-weight : 900;
+  }
 }
