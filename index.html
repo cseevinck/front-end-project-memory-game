@@ -2,51 +2,49 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <title>Matching Game</title>
-  <meta name="description" content="">
-  <meta content="width=device-width,initial-scale=1" name="viewport">
-  <link rel="stylesheet prefetch" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
-  <link rel="stylesheet prefetch" href="https://fonts.googleapis.com/css?family=Coda">
-  <link rel="stylesheet" href="css/app.css">
-  <link rel="stylesheet" href="css/responsive.css">
+    <meta charset="utf-8">
+    <title>Matching Game</title>
+    <meta name="description" content="">
+    <meta content="width=device-width,initial-scale=1" name="viewport">
+    <link rel="stylesheet prefetch" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+    <link rel="stylesheet prefetch" href="https://fonts.googleapis.com/css?family=Coda">
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/responsive.css">
 </head>
 
 <body>
-  <div class="container">
-    <header>
-      <img class='logo' src="img/MatchingGame.png" alt="Matching Game">
-      <!-- <h1>MATCHING GAME</h1> -->
-    </header>
-    <section class="score-panel">
-      <span class="stars" id="stars"> * * * </span>
-      <span class="moves">0</span> Moves
-      <span id="timer">H: 00 M: 00 S: 00</span>
-      <div class="restart">
-        <i class="fa fa-repeat"></i>
-      </div>
-    </section>
-    <ul class="deck">
-      <!-- contents will dynamically be built into this space -->
-    </ul>
-  </div>
-
-  <!-- Modal Section -->
-  <div class="modal-bg">
-    <div class="modal-contents">
-      <a href="#" class="close" onclick="modalRestart()">x</a>
-      <p class="great">Great Job!</p>
-      <p class="move-cnt" id="move-cnt">Number of moves: </p>
-      <p class="game-time" id="game-time">Game time: </p>
-      <p class="game-rating" id="game-rating">Game rating: </p>
-      <a href="#" class="button-restart" onclick="modalRestart()">Play Again</a>
-      <a href="#" class="button-quit" onclick="quitGame()">quit</a>
+    <div class="container">
+        <header>
+            <img class='logo' src="img/MatchingGame.png" alt="Matching Game">
+        </header>
+        <section class="score-panel">
+            <span class="stars" id="stars"> * * * </span>
+            <span class="moves">0 Moves</span>
+            <span id="timer">H: 00 M: 00 S: 00</span>
+            <div class="restart">
+                <i class="fa fa-repeat"></i>
+            </div>
+        </section>
+        <ul class="deck">
+            <!-- contents will dynamically be built into this space -->
+        </ul>
     </div>
-  </div>
-  <div class="stop-screen">
-    <p class="thanks">Thanks for playing</p>
-  </div>
-  <script src="js/app.js"></script>
+    <!-- Modal Section -->
+    <div class="modal-bg">
+        <div class="modal-contents">
+            <a href="#" class="close fa fa-times-circle" onclick="modalRestart()"></a>
+            <p class="great">Great Job!</p>
+            <p class="move-cnt" id="move-cnt">Number of moves: </p>
+            <p class="game-time" id="game-time">Game time: </p>
+            <p class="game-rating" id="game-rating">Game rating: </p>
+            <a href="#" class="button-restart" onclick="modalRestart()">Play Again</a>
+            <a href="#" class="button-quit" onclick="quitGame()">Quit</a>
+        </div>
+    </div>
+    <div class="stop-screen">
+        <p class="thanks">Thanks for playing</p>
+    </div>
+    <script src="js/app.js"></script>
 </body>
 
 </html>

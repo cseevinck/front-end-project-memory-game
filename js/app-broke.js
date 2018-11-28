@@ -14,9 +14,6 @@ let allCards;
 let startTime;
 let intervalId = 0; // id of the interval for the timer
 
-// define length of 'icon-id-' string portion
-const iconStrL = 8;
-
 // +**********************************************************
 // +**********************************************************
 // Start processing here
@@ -45,7 +42,7 @@ function restartGame() {
     allowClicks = true;
     console.log('Here to restart the game');
 
-    // Clear the score panel
+    // Clear the move count
     document.querySelector('.moves').innerHTML = moveCount + ' Moves';
     document.getElementById('stars').innerHTML = doStars(moveCount);
     document.getElementById('timer').innerHTML = timeCounter('reset'); //stop counter
@@ -96,7 +93,6 @@ function restartGame() {
     let fragment = document.createDocumentFragment();
     let elementLi;
     let elementI;
-    debugger;
 
     for (let i = 0; i < 16; i++) {
         elementLi = document.createElement('li');
@@ -110,6 +106,7 @@ function restartGame() {
         elementLi.appendChild(elementI);
         fragment.appendChild(elementLi);
     };
+
     deck.appendChild(fragment); // add fragment to the dom
 }
 
@@ -154,7 +151,7 @@ function shuffle(array) {
 /*
  * filterEvent
  *
- * Throw out the events that we don't want and determine if it's first or second card1
+ * Throw out the events that we don't want an determine if it's first or second card1
  *
  * Input:
  * 1. the event
@@ -171,44 +168,62 @@ function shuffle(array) {
 
 function filterEvent(event) {
     let useTarget;
-    let domAttr;
 
-    // useTarget = the associated element & get class
+    console.log('filterEvent - event = ' + event);
+
+    // useTarget = the associated element that contains the class
     useTarget = event.target;
-    domAttr = useTarget.getAttribute('class');
-    console.log('filterEvent - tagname = ' + useTarget.tagName + ' attribute = ' + domAttr);
+    console.log('filterEvent - tagname = ' + useTarget.tagName);
 
-    // // For testing - force a win
-    // if (useTarget.tagName == 'IMG') {
-    //     console.log('filterEvent - found IMG');
-    //     showModal();
-    //     return 'discard';
-    // };
-    // // For testing - force a win
+    // For testing - force a win
+    if (useTarget.tagName == 'IMG') {
+        console.log('filterEvent - found IMG');
+        showModal();
+        return 'discard';
+    };
 
-    if (domAttr.includes('repeat')) {
+    // For testing - force a win
+
+    if (useTarget.tagName == 'I') {
+        console.log('filterEvent - found I');
+
+        // we want the parent of the 'i' element cause it has the class
+        useTarget = event.target.parentNode;
+
+        // now the useTarget.classList has to have 'card' or 'restart' in it -
+        // throw everything else away
+        // console.log ('replaced target - new tagname = ' + useTarget.tagName);
+    }
+
+    console.log('filterEvent - Use this classList= ' + useTarget.classList);
+    if (!(((useTarget.classList.contains('restart')) ||
+            (useTarget.classList.contains('card'))))) {
+        console.log('filterEvent - discard cause not "restart" or "card" - it is = ' +
+            useTarget.classList);
+        return 'discard';
+    };
+
+    // console.log('filterEvent - Use this classList= ' + useTarget.classList);
+    if (useTarget.classList.contains('restart')) {
         return 'restart';
-    } else if (!(domAttr.includes('card'))) {
+    } else if (!(useTarget.classList.contains('card'))) {
 
         // This must be an event that should be ignored - not 'card' or ' restart'
         console.log('filterEvent - discard this event - tagname = ' + event.target.tagName);
         return ('discard');
-    }
-
-    // here for card
+    };
 
     // Discard event if card is already face-up
-    if ((domAttr.includes('show')) || (domAttr.includes('match'))) {
+    if (((useTarget.classList.contains('show')) ||
+            useTarget.classList.contains('match'))) {
         console.log('filterEvent - allready face-up - ignore click');
         return 'discard';
     }
 
     // Set card 1 or 2 - strip off 'icon-id-' from class to get card index
     if (iconId1 == null) { // card 1
-        // get the id of the card
-        n = domAttr.search("icon-id-");
-        iconId1 = domAttr.slice(n + iconStrL, n + iconStrL + 1);
-        // console.log('filterEvent - done with card1 - iconId1 = ' + iconId1 + ' iconId2 = ' + iconId2);
+        iconId1 = getClassThatMatch(useTarget.classList, 'icon-id-').slice(8);
+        console.log('filterEvent - done with card1 - iconId1 = ' + iconId1 + ' iconId2 = ' + iconId2);
         cardIndex1 = getCardIndex(allCards, useTarget);
         return 'card1';
     }
@@ -216,14 +231,12 @@ function filterEvent(event) {
     // discard if card 2 has the same index as card 1
     let tempCardIndex2 = getCardIndex(allCards, useTarget);
     if (tempCardIndex2 = cardIndex1) {
-        alert('filterEvent - 2nd click was on card1 - bad');
+        console.log('filterEvent - 2nd click was on card1 - discard');
         return 'discard';
     };
 
     cardIndex2 = tempCardIndex2;
-    // get the id of the card
-    n = domAttr.search("icon-id-");
-    iconId2 = domAttr.slice(n + iconStrL, n + iconStrL + 1);
+    iconId2 = getClassThatMatch(useTarget.classList, 'icon-id-').slice(8);
     console.log('filterEvent - done with card2 - iconId1 = ' + iconId1 + ' iconId2 = ' + iconId2);
     return 'card2';
 };
@@ -346,7 +359,7 @@ function CardsMatch(card1, card2) {
  *   - return the index
  * Input 
  * cardList - the card list
- * theCard - the card to match
+ * theCard - teh card to match
  */
 function getCardIndex(cardList, theCard) {
     cardList = document.querySelectorAll('.card');
@@ -357,6 +370,22 @@ function getCardIndex(cardList, theCard) {
             return cardIndex1;
         };
     });
+};
+
+/*
+ * Get class name starting with 'string' from the supplied classList
+ *   - input - element
+ *   - return the class name starting thats matches
+ */
+function getClassThatMatch(theClassList, string) {
+    for (let i = 0; i < theClassList.length; i++) {
+        if (theClassList[i].startsWith(string)) {
+            // console.log ('getClassThatMatch the - class = ' + theClassList[i]);
+            return theClassList[i];
+        };
+    };
+
+    alert('element must have a class starting with ' + string);
 };
 
 /*
