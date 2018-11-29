@@ -4,8 +4,6 @@
  */
 let iconId1 = null;
 let iconId2 = null;
-let cardIndex1 = null;
-let cardIndex2 = null;
 let moveCount = 0; // count total number of pairs tried
 let matchCount = 0; // count the number of matched pairs found
 let allowClicks = true;
@@ -36,8 +34,6 @@ allCards[0].addEventListener('click', eventHandler);
  *
  */
 function restartGame() {
-    cardIndex1 = null;
-    cardIndex2 = null;
     moveCount = 0;
     matchCount = 0;
     iconId1 = null;
@@ -197,7 +193,7 @@ function filterEvent(event) {
 
     // here for card
 
-    // Discard event if card is already face-up
+    // Discard event if card is already face-up 
     if ((domAttr.includes('show')) || (domAttr.includes('match'))) {
         console.log('filterEvent - allready face-up - ignore click');
         return 'discard';
@@ -209,19 +205,10 @@ function filterEvent(event) {
         n = domAttr.search("icon-id-");
         iconId1 = domAttr.slice(n + iconStrL, n + iconStrL + 1);
         // console.log('filterEvent - done with card1 - iconId1 = ' + iconId1 + ' iconId2 = ' + iconId2);
-        cardIndex1 = getCardIndex(allCards, useTarget);
         return 'card1';
     }
 
-    // discard if card 2 has the same index as card 1
-    let tempCardIndex2 = getCardIndex(allCards, useTarget);
-    if (tempCardIndex2 = cardIndex1) {
-        alert('filterEvent - 2nd click was on card1 - bad');
-        return 'discard';
-    };
-
-    cardIndex2 = tempCardIndex2;
-    // get the id of the card
+    // get the id of the second card
     n = domAttr.search("icon-id-");
     iconId2 = domAttr.slice(n + iconStrL, n + iconStrL + 1);
     console.log('filterEvent - done with card2 - iconId1 = ' + iconId1 + ' iconId2 = ' + iconId2);
@@ -314,8 +301,6 @@ function eventHandler(event) {
             // after match or no-match - ready for the next pair
             iconId1 = null;
             iconId2 = null;
-            cardIndex1 = null;
-            cardIndex2 = null;
             break;
 
         default:
@@ -340,24 +325,6 @@ function CardsMatch(card1, card2) {
     // search for class starting with fa- in card1I & card2I
     return getClassFA(card1I) == getClassFA(card2I);
 }
-
-/*
- * Find the index of the supplied card
- *   - return the index
- * Input 
- * cardList - the card list
- * theCard - the card to match
- */
-function getCardIndex(cardList, theCard) {
-    cardList = document.querySelectorAll('.card');
-    cardList.forEach(function(card, cardIndex) {
-        // console.log(card);
-        if (card === theCard) {
-            // console.log('This is the getCardIndex = ' + cardIndex);
-            return cardIndex1;
-        };
-    });
-};
 
 /*
  * Get class name starting with 'fa-'
@@ -387,23 +354,16 @@ function shakeThem(element1, element2) {
     element1.style.position = 'relative';
     element2.style.position = 'relative';
 
-    // console.log ('RelativeStyle = ' + element.style.position);
-
     function theShake() {
         ind++;
         if (ind < 20) {
             if (ind % 2 == 0) {
                 element1.style.left = '-2px';
                 element2.style.left = '-2px';
-
-                // console.log ('theShake- = ' + element.style.left);
             } else {
                 element1.style.left = '2px';
                 element2.style.left = '2px';
-
-                // console.log ('theShake+ = ' + element.style.left);
             };
-
             setTimeout(theShake, 50);
         } else {
             element1.style.cssText = originalStyle1;
@@ -414,6 +374,27 @@ function shakeThem(element1, element2) {
     theShake();
 };
 
+// var box1Left1 = 100, box1Left2, keepShaking = true;
+// var originalLeftPos = parseInt(document.getElementById("box1").style.left);
+
+// setTimeout(stopShake, 1000); //Shake for how long
+// function stopShake() { keepShaking = false; }
+
+// setInterval(shake, 10); //Set shorter interval for faster shake
+function shake() {
+    if (keepShaking == true) {
+        if (box1Left1 < originalLeftPos + 5) { // "+5" = The shake distance. Go right. 
+            box1Left1++;
+            document.getElementById("box1").style.left = box1Left1 + "px";
+            box1Left2 = box1Left1;
+        }
+        if (box1Left1 >= (originalLeftPos + 5)) { // Go left. 
+            box1Left2--;
+            document.getElementById("box1").style.left = box1Left2 + "px";
+        }
+        if (box1Left2 == originalLeftPos) { box1Left1 = box1Left2; } // Go Right Again 
+    }
+}
 /*
  * Display stars
  */
