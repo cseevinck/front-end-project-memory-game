@@ -1,16 +1,11 @@
-// @ts-check 
 /*
  * Declare script wide variables
  */
-let iconId1 = null;
-let iconId2 = null;
 let moveCount = 0; // count total number of pairs tried
-let matchCount = 0; // count the number of matched pairs found
-let allowClicks = true;
-let savCrd1Event;
-let allCards;
+let allElements;
 let startTime;
 let intervalId = 0; // id of the interval for the timer
+let cCards = []; // list for clicked cards
 
 // define length of 'icon-id-' string portion
 const iconStrL = 8;
@@ -22,8 +17,8 @@ const iconStrL = 8;
 // +**********************************************************
 
 restartGame();
-allCards = document.querySelectorAll('.container');
-allCards[0].addEventListener('click', eventHandler);
+allElements = document.querySelectorAll('.container');
+allElements[0].addEventListener('click', eventHandler);
 
 // +**********************************************************
 // Functions below
@@ -35,10 +30,6 @@ allCards[0].addEventListener('click', eventHandler);
  */
 function restartGame() {
     moveCount = 0;
-    matchCount = 0;
-    iconId1 = null;
-    iconId2 = null;
-    allowClicks = true;
     console.log('Here to restart the game');
 
     // Clear the score panel
@@ -48,42 +39,40 @@ function restartGame() {
 
     deleteChildren(document.querySelector('.deck')); // remove all the deck HTML children
 
-    // allCards = document.querySelectorAll('.card');
-    // document.querySelector('.deck');
-    // allCards.forEach(function (card, cardIndex) {
-    //   card.classList.remove('open', 'show', 'match'); // clear all classes
-    // });
-
     /*
      * Create a list that holds all of your cards
      */
 
     // function to create l and li items
-    let TheCard = function(liClass1, liClass2, iClass1, iClass2) {
-        this.liClass1 = liClass1;
-        this.liClass2 = liClass2;
-        this.iClass1 = iClass1;
-        this.iClass2 = iClass2;
+    // let TheCard = function(liClass1, liClass2, iClass1, iClass2) {
+    //     this.liClass1 = liClass1;
+    //     this.liClass2 = liClass2;
+    //     this.iClass1 = iClass1;
+    //     this.iClass2 = iClass2;
+    // };
+
+    let ACard = function(faClass) {
+        this.faClass = faClass;
     };
 
     // create the card list from scratch
     let cardList = new Array();
-    cardList[0] = new TheCard('card', 'icon-id-0', 'fa', 'fa-diamond');
-    cardList[1] = new TheCard('card', 'icon-id-1', 'fa', 'fa-paper-plane-o');
-    cardList[2] = new TheCard('card', 'icon-id-2', 'fa', 'fa-anchor');
-    cardList[3] = new TheCard('card', 'icon-id-3', 'fa', 'fa-bolt');
-    cardList[4] = new TheCard('card', 'icon-id-4', 'fa', 'fa-cube');
-    cardList[5] = new TheCard('card', 'icon-id-5', 'fa', 'fa-leaf');
-    cardList[6] = new TheCard('card', 'icon-id-6', 'fa', 'fa-bicycle');
-    cardList[7] = new TheCard('card', 'icon-id-7', 'fa', 'fa-bomb');
-    cardList[8] = new TheCard('card', 'icon-id-0', 'fa', 'fa-diamond');
-    cardList[9] = new TheCard('card', 'icon-id-1', 'fa', 'fa-paper-plane-o');
-    cardList[10] = new TheCard('card', 'icon-id-2', 'fa', 'fa-anchor');
-    cardList[11] = new TheCard('card', 'icon-id-3', 'fa', 'fa-bolt');
-    cardList[12] = new TheCard('card', 'icon-id-4', 'fa', 'fa-cube');
-    cardList[13] = new TheCard('card', 'icon-id-5', 'fa', 'fa-leaf');
-    cardList[14] = new TheCard('card', 'icon-id-6', 'fa', 'fa-bicycle');
-    cardList[15] = new TheCard('card', 'icon-id-7', 'fa', 'fa-bomb');
+    cardList[0] = new ACard('fa-diamond');
+    cardList[1] = new ACard('fa-paper-plane-o');
+    cardList[2] = new ACard('fa-anchor');
+    cardList[3] = new ACard('fa-bolt');
+    cardList[4] = new ACard('fa-cube');
+    cardList[5] = new ACard('fa-leaf');
+    cardList[6] = new ACard('fa-bicycle');
+    cardList[7] = new ACard('fa-bomb');
+    cardList[8] = new ACard('fa-diamond');
+    cardList[9] = new ACard('fa-paper-plane-o');
+    cardList[10] = new ACard('fa-anchor');
+    cardList[11] = new ACard('fa-bolt');
+    cardList[12] = new ACard('fa-cube');
+    cardList[13] = new ACard('fa-leaf');
+    cardList[14] = new ACard('fa-bicycle');
+    cardList[15] = new ACard('fa-bomb');
 
     shuffle(cardList);
 
@@ -92,17 +81,17 @@ function restartGame() {
     let fragment = document.createDocumentFragment();
     let elementLi;
     let elementI;
-    debugger;
+    let faId;
 
     for (let i = 0; i < 16; i++) {
         elementLi = document.createElement('li');
-
-        // let fragment = document.createDocumentFragment();
-        elementLi.classList.add(cardList[i].liClass1);
-        elementLi.classList.add(cardList[i].liClass2);
+        elementLi.classList.add('card');
+        faId = document.createAttribute('fa-id');
+        faId.value = cardList[i].faClass;
+        elementLi.setAttributeNode(faId);
         elementI = document.createElement('i');
-        elementI.classList.add(cardList[i].iClass1);
-        elementI.classList.add(cardList[i].iClass2);
+        elementI.classList.add('fa');
+        elementI.classList.add(cardList[i].faClass);
         elementLi.appendChild(elementI);
         fragment.appendChild(elementLi);
     };
@@ -143,209 +132,121 @@ function shuffle(array) {
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temporaryValue;
     }
-
     return array;
 }
 
 /*
- * filterEvent
+ * eventHandler
  *
  * Throw out the events that we don't want and determine if it's first or second card1
  *
  * Input:
- * 1. the event
- *
- * Function returns:
- * 1. 'discard' for an event that should be ignored - this might be a
- *        non applicable event due to 'bubbling' or an already flipped card.
- * 2. 'restart' for an restart event
- * 3. 'card 1' for the first in a pair of cards
- * 4. 'card 2' for the second in a pair of cards
- *
- * If functions returns 'false' the event is discarded
+ * - the event
+ * 
  */
-
-function filterEvent(event) {
-    let useTarget;
+function eventHandler(event) {
+    let ele; // event element
     let domAttr;
 
-    // useTarget = the associated element & get class
-    useTarget = event.target;
-    domAttr = useTarget.getAttribute('class');
-    console.log('filterEvent - tagname = ' + useTarget.tagName + ' attribute = ' + domAttr);
+    // card = the associated element & get class
+    ele = event.target;
+    domAttr = ele.getAttribute('class');
+    console.log('filterEvent - tagname = ' + ele.tagName + ' attribute = ' + domAttr);
 
-    // // For testing - force a win
-    // if (useTarget.tagName == 'IMG') {
-    //     console.log('filterEvent - found IMG');
-    //     showModal();
-    //     return 'discard';
-    // };
-    // // For testing - force a win
+    // For testing - force a win
+    if (ele.tagName == 'IMG') {
+        console.log('filterEvent - found IMG');
+        showModal();
+        return;
+    };
+    // For testing - force a win
 
+    // See if this is a game reset request
     if (domAttr.includes('repeat')) {
-        return 'restart';
+        restartGame();
+        return;
     } else if (!(domAttr.includes('card'))) {
 
         // This must be an event that should be ignored - not 'card' or ' restart'
         console.log('filterEvent - discard this event - tagname = ' + event.target.tagName);
-        return ('discard');
+        return;
     }
 
-    // here for card
+    // here for card - push it onto clicked list and set attributes
+    cCards.push(ele);
+    if (cCards.length != 2) {
 
-    // Discard event if card is already face-up 
-    if ((domAttr.includes('show')) || (domAttr.includes('match'))) {
-        console.log('filterEvent - allready face-up - ignore click');
-        return 'discard';
-    }
+        // first card
+        cCards[0].classList.add('open', 'show', 'clicked');
+    } else {
 
-    // Set card 1 or 2 - strip off 'icon-id-' from class to get card index
-    if (iconId1 == null) { // card 1
-        // get the id of the card
-        n = domAttr.search("icon-id-");
-        iconId1 = domAttr.slice(n + iconStrL, n + iconStrL + 1);
-        // console.log('filterEvent - done with card1 - iconId1 = ' + iconId1 + ' iconId2 = ' + iconId2);
-        return 'card1';
-    }
+        // second card 
+        doMoveCount(); //increase and display moveCount
+        document.getElementById('stars').innerHTML = doStars(moveCount);
 
-    // get the id of the second card
-    n = domAttr.search("icon-id-");
-    iconId2 = domAttr.slice(n + iconStrL, n + iconStrL + 1);
-    console.log('filterEvent - done with card2 - iconId1 = ' + iconId1 + ' iconId2 = ' + iconId2);
-    return 'card2';
-};
+        // second card - check if match
+        if (cCards[0].getAttribute('fa-id') == cCards[1].getAttribute('fa-id')) {
+            // we have a match
+            cCards[1].classList.add('open', 'show', 'match', 'clicked');
+            cCards[0].classList.add('open', 'show', 'match', 'clicked');
 
-/*
- * Create an event handler for all events using a switch statement
- *
- * Input:
- * 1. event
- */
-function eventHandler(event) {
-    if (!(allowClicks)) {
-        console.log('eventHandler - Clicks not allowed - discard');
-        return false;
-    };
+            // clear clicked list
+            cCards.pop(ele);
+            cCards.pop(ele);
 
-    console.log('eventHandler - before switch');
+            // here to check for all cards match = end of game 
+            if (gameDone()) {
 
-    const switchValue = filterEvent(event);
-    switch (switchValue) {
-
-        case 'discard':
-            console.log('eventHandler - discard event with target  = ' + event.target.tagName);
-
-            break;
-
-        case 'restart':
-            console.log('eventHandler - event with restart = ' + event.target.tagName);
-            restartGame();
-
-            break;
-
-        case 'card1':
-            console.log('eventHandler - card1 classList ' + event.target.classList);
-            event.target.classList.add('open', 'show');
-            savCrd1Event = event; // save event for later
-
-            break;
-
-        case 'card2':
-            console.log('eventHandler - card2 classList ' + event.target.classList);
-            event.target.classList.add('open', 'show');
-            console.log('We have a pair');
-            console.log('We have a pair - moveCount = ' + moveCount);
-            if (moveCount++ == 0) {
-                document.getElementById('timer').innerHTML = timeCounter('start');
-                document.querySelector('.moves').innerHTML = moveCount + ' Move';
-            } else {
-                document.querySelector('.moves').innerHTML = moveCount + ' Moves';
+                // we are done - winner!
+                showModal();
             };
+        } else {
 
-            document.getElementById('stars').innerHTML = doStars(moveCount);
+            // not a match
+            cCards[1].classList.add('open', 'show', 'clicked');
+            shakeThem(cCards[0], cCards[1]);
 
-            // here to check for a match
-            if (iconId1 == iconId2) {
+            // wait for 1 seconds then hide cards
+            setTimeout(function() {
+                cCards[0].classList.remove('open', 'show', 'clicked'); // hide first card
+                cCards[1].classList.remove('open', 'show', 'clicked'); // hide second card
 
-                // it's a match
-                event.target.classList.remove('open', 'show'); // card 2
-                savCrd1Event.target.classList.remove('open', 'show'); // card 1
-                event.target.classList.add('match'); // card 2
-                savCrd1Event.target.classList.add('match'); // card 1
-                matchCount++;
-                document.getElementById('stars').innerHTML = doStars(moveCount);
-                console.log('cards match - matchCount = ' + matchCount);
-
-                // here to check for all cards match = end of game
-                if (matchCount > 7) {
-
-                    // we are done - you are a winne
-                    showModal();
-                }
-            } else {
-
-                // cards do not match
-                allowClicks = false; // setting to ignore clicks till after timeout
-                shakeThem(event.target, savCrd1Event.target);
-
-                // wait for 2 seconds then hide cards
-                setTimeout(function() {
-                    savCrd1Event.target.classList.remove('open', 'show'); // hide first card
-                    event.target.classList.remove('open', 'show'); // hide second card
-                    allowClicks = true; // setting to allow clicks again
-                }, 2000);
-
-                console.log('No match');
-            };
-
-            // after match or no-match - ready for the next pair
-            iconId1 = null;
-            iconId2 = null;
-            break;
-
-        default:
-            alert('eventHandler - invalid switchValue = ' + switchValue);
-    };
-
-    console.log('eventHandler - after switch - switchValue = ' + switchValue);
-};
-
-/*
- * Check if the two supplied cards match
- *   - receive two card elements (the li elements)
- *   - return true if cards match
- */
-function CardsMatch(card1, card2) {
-    const card1I = card1.firstElementChild;
-    const card2I = card2.firstElementChild;
-    if (card1I.tagName != 'I' || card2I.tagName != 'I') {
-        alert('I elements must be first after li element');
-    }
-
-    // search for class starting with fa- in card1I & card2I
-    return getClassFA(card1I) == getClassFA(card2I);
-}
-
-/*
- * Get class name starting with 'fa-'
- *   - input - 'I' element
- *   - return the class name starting with 'fa-' from the list
- */
-function getClassFA(elementI) {
-    for (let i = 0; i < elementI.classList.length; i++) {
-        if (elementI.classList[i].startsWith('fa-')) {
-            return elementI.classList[i];
+                // clear the clicked list
+                cCards.pop(ele);
+                cCards.pop(ele);
+            }, 1000);
         };
     };
+};
 
-    alert('I element must have a class starting with "fa-"');
+/*
+ * Handles the number of moves counter
+ */
+function doMoveCount() {
+    console.log('We have a pair - moveCount = ' + moveCount);
+    if (moveCount++ == 0) {
+        document.getElementById('timer').innerHTML = timeCounter('start');
+        document.querySelector('.moves').innerHTML = moveCount + ' Move';
+    } else {
+        document.querySelector('.moves').innerHTML = moveCount + ' Moves';
+    };
+};
+
+/*
+ * Check if game is complete
+ * 
+ * Return true if game done
+ */
+function gameDone() {
+    let matched = document.querySelectorAll(".match");
+    return (matched.length === 16);
 };
 
 /*
  * ShakeThem - animate the two provided elements
  */
 function shakeThem(element1, element2) {
-    // shake element e left and right.
+    // shake element left and right.
     let ind = 1;
     const originalStyle1 = element1.style.cssText;
     const originalStyle2 = element2.style.cssText;
@@ -373,12 +274,6 @@ function shakeThem(element1, element2) {
 
     theShake();
 };
-
-// var box1Left1 = 100, box1Left2, keepShaking = true;
-// var originalLeftPos = parseInt(document.getElementById("box1").style.left);
-
-// setTimeout(stopShake, 1000); //Shake for how long
-// function stopShake() { keepShaking = false; }
 
 // setInterval(shake, 10); //Set shorter interval for faster shake
 function shake() {
@@ -528,7 +423,7 @@ function hideModal() {
 
 /*
  *
- * hideModal
+ * modalRestart
  *
  */
 function modalRestart() {
@@ -536,20 +431,13 @@ function modalRestart() {
     document.querySelector('.modal-bg').style.display = 'none';
     restartGame();
 };
-
+/*
+ *
+ * quitGame
+ *
+ */
 function quitGame() {
     console.log('quitGame');
     document.querySelector('.modal-bg').style.display = 'none';
     document.querySelector('.stop-screen').style.display = 'flex';
 };
-
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of 'open' cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
