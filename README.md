@@ -1,4 +1,5 @@
 # Memory Game Project
+Goal: Match all cards with as few as possible tries in as short a time as possible. 
 
 ## Table of Contents
 
@@ -12,6 +13,16 @@ The starter project has some HTML and CSS styling to display a static version of
 To get started, open `js/app.js` and start building out the app's functionality
 
 For specific, detailed instructions, look at the project instructions in the [Udacity Classroom](https://classroom.udacity.com/me).
+
+## Play instructions
++ click on two tiles to see if they match. If they do they will remain face-up. If they 
+  not match they will be hidden again after 1 second. Try to remember where which cards are.
++ Click on a different pair. If you see one you have seen before, you have another pair      you can expose.
++ When you have exposed all the tiles you will be declared the winner.
+
+## Dependancies 
++ Icons - Font Awesome
++ Google fonts
 
 ## Contributing
 

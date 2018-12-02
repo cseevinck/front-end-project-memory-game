@@ -21,14 +21,13 @@ body {
 }
 
 .container {
+    background: #004d00;
     display: flex;
-    height: 1200px;
     width: 100vw;
+    height: 1200px;
     padding-top: 2em;
-    background-color: #477148;
     align-items: center;
     flex-direction: column;
-    /* justify-content: center; */
 }
 
 h1 {
@@ -40,8 +39,7 @@ h1 {
     display: block;
     max-width: 60%;
     height: auto;
-    margin-right: auto;
-    margin-left: auto;
+    margin: 0 auto 0 auto;
 }
 
 
@@ -54,8 +52,7 @@ h1 {
     margin: 0 0 3em;
     padding: 32px;
     border-radius: 10px;
-    background: linear-gradient( 160deg, #708090 0%, #C0C0C0 100%);
-    /* background: linear-gradient( 160deg, #02ccba 0%, #aa7ecd 100%); */
+    background: linear-gradient(160deg, #708090 0%, #c0c0c0 100%);
     box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5);
     align-items: center;
     flex-wrap: wrap;
@@ -69,7 +66,6 @@ h1 {
     color: #ffffff;
     border-radius: 8px;
     background: #000000;
-    /* background: #2e3d49; */
     box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
     align-items: center;
     font-size: 0;
@@ -78,7 +74,6 @@ h1 {
 }
 
 .deck .card.open {
-    /* background: #02b3e4; */
     background: #100099;
     transform: rotateY(0);
     cursor: default;
@@ -93,8 +88,7 @@ h1 {
 }
 
 .deck .card.match {
-    background: #971718;
-    /* background: #02ccba; */
+    background: #009973;
     font-size: 33px;
     cursor: default;
 }
@@ -105,20 +99,24 @@ h1 {
 .score-panel {
     width: 345px;
     margin-bottom: 10px;
-    text-align: left;
     color: yellow;
+    text-align: left;
 }
 
 #stars {
     display: inline-block;
-    margin: 0;
     margin: 0 5px 0 0;
     padding: 0;
 }
 
 .score-panel .restart {
     float: right;
+    padding: 13px;
     cursor: pointer;
+}
+
+.score-panel .restart:hover {
+    animation: fa-spin 2s 1 linear;
 }
 
 #timer {
@@ -129,13 +127,13 @@ h1 {
 /* Model styling */
 
 .modal-bg {
+    background: rgba(0, 0, 0, 0.8);
     display: none;
     position: absolute;
-    padding-top: 2em;
     top: 0;
-    height: 1200px;
     width: 100vw;
-    background-color: rgba(0, 0, 0, 0.8);
+    height: 1200px;
+    padding-top: 2em;
     justify-content: center;
 }
 
@@ -145,54 +143,54 @@ h1 {
     height: 300px;
     padding: 20px;
     color: yellow;
-    background: #477148;
     border: 8px solid #708090;
     border-radius: 6px;
+    background: #477148;
     text-align: center;
 }
 
 .button-restart {
+    background: #100099;
     display: inline-block;
     margin-top: 10px;
     padding: 10px 28px;
     color: #708090;
     border: 2px solid #708090;
     border-radius: 30px;
-    background-color: #100099;
     text-decoration: none;
 }
 
 .button-quit {
+    background: #100099;
     display: inline-block;
     margin-top: 10px;
     padding: 10px 28px;
     color: #708090;
     border: 2px solid #708090;
     border-radius: 30px;
-    background-color: #100099;
     text-decoration: none;
 }
 
 .button-restart:hover {
+    background: white;
     color: #1686d9;
     border: 2px solid #1686d9;
-    background-color: white;
 }
 
 .button-quit:hover {
+    background: white;
     color: #1686d9;
     border: 2px solid #1686d9;
-    background-color: white;
 }
 
 .close {
     position: absolute;
     top: 0;
-    right: 10px;
-    padding-top: 10px;
+    right: 0;
+    padding: 13px;
     color: yellow;
     text-decoration: none;
-    font-size: 20px;
+    font-size: 1.3em;
     cursor: pointer;
 }
 
@@ -204,10 +202,9 @@ h1 {
     display: none;
     position: absolute;
     top: 0;
-    height: 1200px;
     width: 100vw;
+    height: 1200px;
     background: #477148;
-    /* align-items: center; */
     justify-content: center;
 }
 
@@ -215,4 +212,63 @@ h1 {
     color: yellow;
     font-size: 3em;
     font-weight: 900;
+}
+
+
+/* Animation styling */
+
+@keyframes tada-box {
+    0% {
+        transform: scale(1);
+    }
+    10%,
+    20% {
+        transform: scale(0.9) rotate(-3deg);
+    }
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: scale(1.1) rotate(3deg);
+    }
+    40%,
+    60%,
+    80% {
+        transform: scale(1.1) rotate(-3deg);
+    }
+    100% {
+        transform: scale(1) rotate(0);
+    }
+}
+
+.tada {
+    animation: tada-box 1s;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+}
+
+@keyframes shake-box {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(-3px);
+    }
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(3px);
+    }
+}
+
+.shaking {
+    animation: shake-box 1s;
+    animation-duration: 0.2s;
+    animation-iteration-count: 2;
 }
