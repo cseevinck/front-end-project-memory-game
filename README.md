@@ -15,14 +15,22 @@ To get started, open `js/app.js` and start building out the app's functionality
 For specific, detailed instructions, look at the project instructions in the [Udacity Classroom](https://classroom.udacity.com/me).
 
 ## Play instructions
-+ click on two tiles to see if they match. If they do they will remain face-up. If they 
+Click on two tiles to see if they match. If they do they will remain face-up. If they 
   not match they will be hidden again after 1 second. Try to remember where which cards are.
-+ Click on a different pair. If you see one you have seen before, you have another pair      you can expose.
-+ When you have exposed all the tiles you will be declared the winner.
+
+Click on a different pair. If you see one you have seen before, you have another pair you can expose.
+
+When you have exposed all the tiles you will be declared the winner.
 
 ## Dependancies 
-+ Icons - Font Awesome
-+ Google fonts
+Icons - Font Awesome
+
+Google fonts
+
+## Credits
+References: stackoverflow.com, w3schools.com, Youtube.com, developer.mozilla.org, css-tricks.com, Udacity lectures, coveloping.com, javascript.info, geeksforgeeks.org, and other sites I found online.
+
+Gary Logan (friend) who helped me find an apostrophe problem after 5 hours of beating my head against the wall
 
 ## Contributing
 
